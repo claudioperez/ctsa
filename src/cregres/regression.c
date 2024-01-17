@@ -5,6 +5,7 @@
  *      Author: Rafat Hussain
  */
 
+#include "stats.h"
 #include "regression.h"
 
 

@@ -4,7 +4,7 @@
  *  Created on: May 13, 2013
  *      Author: Rafat Hussain
  */
-
+#include <stdlib.h>
 #include "stats.h"
 
 double mean(double* vec, int N) {

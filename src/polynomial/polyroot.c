@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <math.h>
+#include <float.h>
 #include "polyroot.h"
 
 /*
@@ -7,6 +10,22 @@ C     P. 097.
  Used under ACM Software License Agreement for Non-commercial Use
  Read it in Full  - http://www.acm.org/publications/policies/softwarecrnotice
 */
+
+// TODO: macheps can probably be done better
+static double 
+macheps() 
+{
+	double macheps;
+	macheps = 1.0;
+
+	while ((macheps + 1.0) > 1.0)
+		macheps = macheps / 2.0;
+
+	macheps = macheps * 2;
+
+	return macheps;
+}
+
 
 static void mcon(double *ETA, double *INFINY, double *SMALNO, double *BASE) {
 	*ETA = macheps();

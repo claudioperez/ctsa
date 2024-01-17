@@ -18,9 +18,9 @@
 extern "C" {
 #endif
 
-void detrend_ma(double *sig,int N, int window,double *oup);
-
 int poly(double *A, double *B, double *C, int lA, int lB);
+
+// void detrend_ma(double *sig,int N, int window,double *oup);
 
 int upsample(double *x,int lenx, int M, double *y);
 
@@ -75,7 +75,5 @@ void supsmu(double *x, int N, double *y,double *w, int periodic,double span, dou
 #ifdef __cplusplus
 }
 #endif
-
-
 
 #endif /* TALG_H_ */

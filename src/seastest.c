@@ -1,26 +1,37 @@
+#include <math.h>
+#include <float.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "talg.h"
+#include "stats.h"
+#include "boxcox.h"
+#include "matrix.h"
+#include "regression.h"
 #include "seastest.h"
+
+#define PIVAL 3.14159265358979323846264338327950288
 
 static void findMeans(double *x, int N, int stride, double *means) {
     int i, j, batches;
 
     batches = ceil((double) N / (double) stride);
 
-    for(i = 0; i < stride;++i) {
+    for (i = 0; i < stride;++i) {
         means[i] = 0.0;
     }
 
-    for(i = 0; i < batches-1;++i) {
-        for(j = 0; j < stride;++j) {
+    for (i = 0; i < batches-1;++i) {
+        for (j = 0; j < stride;++j) {
             means[j] += x[i*stride+j];
         }
     }
 
-    for(j = 0; j < N - (batches-1)*stride;++j) {
+    for (j = 0; j < N - (batches-1)*stride;++j) {
         means[j] += x[(batches-1)*stride + j];
         means[j] /= (double) batches;
     }
 
-    for(j = N - (batches-1)*stride; j < stride;++j) {
+    for (j = N - (batches-1)*stride; j < stride;++j) {
         means[j] /= (double) (batches - 1);
     }
 
@@ -35,7 +46,7 @@ void decompose(double *x,int N, int f,double *filter, const char *type, double *
 
     if (filter == NULL) {
         filt = (double*) malloc(sizeof(double) * f);
-        for(i = 0; i < f;++i) {
+        for (i = 0; i < f;++i) {
             filt[i] = 1.0 / (double) f;
         }
     } else {
@@ -64,11 +75,11 @@ void decompose(double *x,int N, int f,double *filter, const char *type, double *
     seasonalmeans = (double*) malloc(sizeof(double) * f);
 
     if (!strcmp(type,"multiplicative")) {
-        for(i = f2; i < clen + f2;++i) {
+        for (i = f2; i < clen + f2;++i) {
             detrend[i-f2] = x[i] / cout[i-f2];
         }
     } else if (!strcmp(type,"additive")) {
-        for(i = f2; i < clen + f2;++i) {
+        for (i = f2; i < clen + f2;++i) {
             detrend[i-f2] = x[i] - cout[i-f2];
         }
     }
@@ -77,23 +88,23 @@ void decompose(double *x,int N, int f,double *filter, const char *type, double *
 
     findMeans(detrend,clen,f,seasonalmeans);
 
-    for(i = 0; i < f-f2;++i) {
+    for (i = 0; i < f-f2;++i) {
         seas[i] = seasonalmeans[f2+i];
     }
 
-    for(i = f-f2; i < f;++i) {
+    for (i = f-f2; i < f;++i) {
         seas[i] = seasonalmeans[i-f+f2];
     }
 
     batches = ceil((double) clen / (double) f);
 
-    for(i = 1; i < batches-1;++i) {
-        for(j = 0; j < f;++j) {
+    for (i = 1; i < batches-1;++i) {
+        for (j = 0; j < f;++j) {
             seas[i*f+j] =seas[j];
         }
     }
     j = 0;
-    for( i = f*(batches-1); i < clen - f*(batches-1);++i) {
+    for ( i = f*(batches-1); i < clen - f*(batches-1);++i) {
         seas[i] = seas[j];
         j++;
     }
@@ -110,17 +121,17 @@ void decompose(double *x,int N, int f,double *filter, const char *type, double *
     *ltrend = clen;
 
     if (!strcmp(type,"multiplicative")) {
-        for(i = f2; i < clen + f2;++i) {
+        for (i = f2; i < clen + f2;++i) {
             random[i-f2] = x[i] / trend[i-f2];
         }
-        for(i = 0; i < clen;++i) {
+        for (i = 0; i < clen;++i) {
             random[i] = random[i] /seas[i];
         }
     } else if (!strcmp(type,"additive")) {
-        for(i = f2; i < clen + f2;++i) {
+        for (i = f2; i < clen + f2;++i) {
             random[i-f2] = x[i] - trend[i-f2];
         }
-        for(i = 0; i < clen;++i) {
+        for (i = 0; i < clen;++i) {
             random[i] = random[i] - seas[i];
         }
     }
@@ -157,7 +168,7 @@ static int degCheck(int deg) {
 static void cycle(int N, int f, int *cyc) {
     int i;
 
-    for(i = 0; i < N;++i) {
+    for (i = 0; i < N;++i) {
         cyc[i] = i%f;
     }
 }
@@ -170,16 +181,16 @@ static void applySeasonalMean(double *x,int N,int *cycle,int f) {
     seasonal_means = (double*)calloc(f,sizeof(double)*f);
     cval = (int*)calloc(f,sizeof(int)*f);
 
-    for(i = 0; i < N;++i) {
+    for (i = 0; i < N;++i) {
         cval[cycle[i]] += 1;
         seasonal_means[cycle[i]] += x[i];
     }
 
-    for(i = 0; i < f;++i) {
+    for (i = 0; i < f;++i) {
         seasonal_means[i] /= (double) cval[i];
     }
 
-    for(i = 0; i < N;++i) {
+    for (i = 0; i < N;++i) {
         x[i] = seasonal_means[cycle[i]];
     }
 
@@ -187,8 +198,10 @@ static void applySeasonalMean(double *x,int N,int *cycle,int f) {
     free(cval);
 }
 
-void stl(double *x,int N,int f, const char *s_window_type,int *s_window, int *s_degree, int *t_window, int *t_degree,int *l_window,int *l_degree,
-    int *s_jump, int *t_jump, int *l_jump, int *robust,int *inner, int *outer,double *seasonal,double *trend, double *remainder) {
+void
+stl(double *x,int N,int f, const char *s_window_type,int *s_window, int *s_degree, int *t_window, int *t_degree,int *l_window,int *l_degree,
+    int *s_jump, int *t_jump, int *l_jump, int *robust,int *inner, int *outer,double *seasonal,double *trend, double *remainder)
+{
     
     double *rw,*work;
     int *seas_cycle;
@@ -251,7 +264,6 @@ void stl(double *x,int N,int f, const char *s_window_type,int *s_window, int *s_
 
     stl_(x,&N,&f,&s_window_,&t_window_,&l_window_,&s_degree_,&t_degree_,&l_degree_,&s_jump_,&t_jump_,&l_jump_,&inner_,&outer_,rw,seasonal,trend,work);
 	
-
     if (periodic_) {
         cycle(N,f,seas_cycle);
         applySeasonalMean(seasonal,N,seas_cycle,f);
@@ -285,11 +297,11 @@ void modstl(double *x, int N, int f, int *s_window,double *lambda, double *seaso
         stl(y,N,f,"null",&s_window_,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,seasonal,trend,remainder);
     } else {
         t = (double*) malloc(sizeof(double)*N);
-        for(i = 0; i < N;++i) {
+        for (i = 0; i < N;++i) {
             t[i] = i;
         }
         supsmu(t,N,y,NULL,1,0,-1.0,trend);
-        for(i = 0; i < N;++i) {
+        for (i = 0; i < N;++i) {
             seasonal[i] = 0.0;
             remainder[i] = y[i] - trend[i];
         }
@@ -300,15 +312,15 @@ void modstl(double *x, int N, int f, int *s_window,double *lambda, double *seaso
 }
 
 void mstl(double *x, int N, int *f, int *Nseas, int *s_window,double *lambda,int *iterate, double **seasonal, double *trend,double *remainder) {
-    int i,j,k,s_window_,Niter,iterate_,iter,freq;
+    int i,j,k,iter,freq;
     double *y,*t,*deseas;
     double *msts,*seas;
     int *pos;
 
-    Niter = 0;
+    int Niter = 0;
 
-    s_window_ = (s_window == NULL) ? 13 : *s_window;
-    iterate_ = (iterate == NULL) ? 2 : *iterate;
+    int s_window_ = (s_window == NULL) ? 13 : *s_window;
+    int iterate_ = (iterate == NULL) ? 2 : *iterate;
 
     y = (double*)malloc(sizeof(double)*N);
 
@@ -320,7 +332,7 @@ void mstl(double *x, int N, int *f, int *Nseas, int *s_window,double *lambda,int
 
     msts = (double*)malloc(sizeof(double)*(*Nseas));
 
-    for(i = 0; i < *Nseas;++i) {
+    for (i = 0; i < *Nseas;++i) {
         if (f[i] < N / 2) {
             msts[Niter] = (double) f[i];
             Niter++;
@@ -338,27 +350,27 @@ void mstl(double *x, int N, int *f, int *Nseas, int *s_window,double *lambda,int
 
         memcpy(deseas,y,sizeof(double)*N);
 
-        for(j = 0; j < iterate_;++j) {
-            for(i = 0; i < Niter;++i) {
+        for (j = 0; j < iterate_;++j) {
+            for (i = 0; i < Niter;++i) {
                 iter = i * N;
-                for(k = 0; k < N;++k) {
+                for (k = 0; k < N;++k) {
                     deseas[k] += seas[iter+k];
                 }
                 freq = (int) msts[i];
                 stl(deseas,N,freq,"null",&s_window_,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,seas+iter,trend,remainder);
-                for(k = 0; k < N;++k) {
+                for (k = 0; k < N;++k) {
                     deseas[k] -= seas[iter+k];
                 }
                 f[i] = freq;
             }
         }
 
-        for(i = 0; i < N;++i) {
+        for (i = 0; i < N;++i) {
             remainder[i] = deseas[i] - trend[i];
         }
-        for(i = 0; i < Niter;++i) {
+        for (i = 0; i < Niter;++i) {
             iter = i * N;
-            for(j = 0; j < N;++j) {
+            for (j = 0; j < N;++j) {
                 seasonal[i][j] = seas[iter+j];
             }
         }
@@ -369,11 +381,11 @@ void mstl(double *x, int N, int *f, int *Nseas, int *s_window,double *lambda,int
         free(deseas);
     } else {
         t = (double*) malloc(sizeof(double)*N);
-        for(i = 0; i < N;++i) {
+        for (i = 0; i < N;++i) {
             t[i] = i;
         }
         supsmu(t,N,y,NULL,1,0,-1.0,trend);
-        for(i = 0; i < N;++i) {
+        for (i = 0; i < N;++i) {
             remainder[i] = y[i] - trend[i];
         }
         *Nseas = 0;
@@ -417,7 +429,7 @@ double* genLags(double *y, int N, int mlags, int *rows, int *cols) {
 
     out = (double*) malloc(sizeof(double) * (N-mlags+1)*mlags);
 
-    for(i = 0; i < mlags;++i) {
+    for (i = 0; i < mlags;++i) {
         memcpy(out+(N-mlags+1)*i,y+mlags-1-i,sizeof(double)*(N-mlags+1));
     }
 
@@ -462,7 +474,7 @@ reg_object fitOCSB(double *x, int N, int f, int lag, int mlags) {
     mf = (double*) malloc(sizeof(double)*ylrows*Ny);
     mfrows = ylrows;
 
-    for(i = 0; i < ylrows;++i) {
+    for (i = 0; i < ylrows;++i) {
         memcpy(mf+Ny*i,ylag+ylcols*i,sizeof(double)*Ny);
     }
 
@@ -493,8 +505,8 @@ reg_object fitOCSB(double *x, int N, int f, int lag, int mlags) {
 
     //printf("nz4y %d ylrows %d ylcols %d",Nz4y,ylrows,ylcols);
 
-    for(i = 0; i < Nz4y;++i) {
-        for(j = 0; j < ylrows;++j) {
+    for (i = 0; i < Nz4y;++i) {
+        for (j = 0; j < ylrows;++j) {
             inp[j] = z4_lag[j*ylcols+i];
         }
 
@@ -519,8 +531,8 @@ reg_object fitOCSB(double *x, int N, int f, int lag, int mlags) {
     z5_preds = (double*) malloc(sizeof(double)*Nz5y);
     z5 = (double*) malloc(sizeof(double)*Nz5y);
 
-    for(i = 0; i < Nz5y;++i) {
-        for(j = 0; j < ylrows;++j) {
+    for (i = 0; i < Nz5y;++i) {
+        for (j = 0; j < ylrows;++j) {
             inp[j] = z5_lag[j*ylcols+i];
         }
 
@@ -593,7 +605,7 @@ static double getCVal(reg_object fit,const char *method) {
 static int checkAllNans(double *icvals,int N) {
     int i;
 
-    for(i = 0; i < N;++i) {
+    for (i = 0; i < N;++i) {
         if (icvals[i] == icvals[i]) {
             return 0;
         }
@@ -609,7 +621,7 @@ static int getBestIndex(double *icvals,int N) {
     best = icvals[0] == icvals[0] ? icvals[0] : DBL_MAX;
     bind = icvals[0] == icvals[0] ? 0 : -1;
 
-    for(i = 1; i < N;++i) {
+    for (i = 1; i < N;++i) {
         if (icvals[i] < best && icvals[i] == icvals[i]) {
             bind = i;
             best = icvals[i];
@@ -631,7 +643,7 @@ void OCSBtest(double *x, int N, int f, int mlags, const char *method,double *sta
     maxlag = mlags;
     if (mlags > 0 && strcmp(method,"fixed")) {
 
-        for(i = 1; i <= mlags;++i) {
+        for (i = 1; i <= mlags;++i) {
             list[i-1] = fitOCSB(x,N,f,i,mlags);
             icvals[i-1] = getCVal(list[i-1],method);
             //printf("icvals %g",icvals[i-1]);
@@ -680,13 +692,13 @@ void OCSBtest(double *x, int N, int f, int mlags, const char *method,double *sta
 
     tval = (double*) malloc(sizeof(double)*fit->p);
 
-    for(i = 0; i < fit->p; ++i) {
+    for (i = 0; i < fit->p; ++i) {
 		tval[i] = (fit->beta+i)->value/(fit->beta+i)->stdErr;
 	}
 
     //mdisplay(tval,1,fit->p);
 
-    for(i = 0; i < mlags;++i) {
+    for (i = 0; i < mlags;++i) {
 		free_reg(list[i]);
     }
 
@@ -707,7 +719,7 @@ void SHtest(double *x, int N, int *f, int Nseas, double *season) {
     double vare,tmp1;
 
     seasonal = (double**)calloc(Nseas,sizeof(double*));
-    for(i = 0; i < Nseas;++i) {
+    for (i = 0; i < Nseas;++i) {
         seasonal[i] = (double*)calloc(N,sizeof(double));
     }
     trend = (double*)calloc(N,sizeof(double));
@@ -722,9 +734,9 @@ void SHtest(double *x, int N, int *f, int Nseas, double *season) {
 
     vare = var(remainder,N);
 
-    for(j = 0; j < Niter; ++j) {
+    for (j = 0; j < Niter; ++j) {
 
-        for(i = 0; i < N;++i) {
+        for (i = 0; i < N;++i) {
             vari[i] = remainder[i] + seasonal[j][i];
         }
 
@@ -736,7 +748,7 @@ void SHtest(double *x, int N, int *f, int Nseas, double *season) {
 
     }
     
-    for(i = 0; i < Nseas;++i) {
+    for (i = 0; i < Nseas;++i) {
         free(seasonal[i]);
     }
 
@@ -759,13 +771,13 @@ double* seasdummy(double *x, int N,int f,int *rows, int *cols) {
     fmatrix = (double*)malloc(sizeof(double)*N*2*f);
     oup = (double*)malloc(sizeof(double)*N*(f-1));
 
-    for(i = 0; i < N;++i) {
+    for (i = 0; i < N;++i) {
         tt[i] = (double) i + 1;
     }
 
-    for(i = 0; i < N; ++i) {
+    for (i = 0; i < N; ++i) {
         iter = i * 2 * f;
-        for(j = 1; j <= f; ++j) {
+        for (j = 1; j <= f; ++j) {
             fmatrix[iter + 2 * j - 1 ] = sin(2 * (double) PIVAL * j * tt[i] / (double) f);
             fmatrix[iter + 2 * (j - 1) ] = cos(2 * (double) PIVAL * j * tt[i] /(double) f);
             //printf("%d %d \n",iter + 2 * j,iter + 2 * j+1);
@@ -776,7 +788,7 @@ double* seasdummy(double *x, int N,int f,int *rows, int *cols) {
 
     //mdisplay(fmatrix,N,2*f);
 
-    for(i = 0; i < N;++i) {
+    for (i = 0; i < N;++i) {
         memcpy(oup + i * (f-1),fmatrix + i * 2 * f,sizeof(double)* (f-1));
     }
 
@@ -811,7 +823,7 @@ double SDtest(double *x, int N,int f) {
 
     frec = (int*) malloc(sizeof(int)*lf);
 
-    for(i = 0; i < lf;++i) {
+    for (i = 0; i < lf;++i) {
         frec[i] = 1;
     }
 

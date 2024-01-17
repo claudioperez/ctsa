@@ -6,6 +6,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "spectrum.h"
 
 spectrum_fft_object spectrum_fft_init(int N,int Nfft) {

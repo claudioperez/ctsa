@@ -1,7 +1,7 @@
 #ifndef STL_H_
 #define STL_H_
 
-#include "polyroot.h"
+// #include "polyroot.h"
 
 #ifdef __cplusplus
 extern "C" {

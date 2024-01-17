@@ -6,7 +6,7 @@
  */
 
 #include "filter.h"
-
+#if 0
 double norm2(double *array, int N) {
 	int i;
 	double nrm;
@@ -18,6 +18,7 @@ double norm2(double *array, int N) {
 	nrm = sqrt(nrm);
 	return nrm;
 }
+#endif
 
 void conv(double *sig, int len_sig, double *filt, int len_filt, double *oup) {
 	if (len_sig >= len_filt) {

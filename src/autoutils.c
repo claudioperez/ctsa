@@ -1,6 +1,23 @@
+#include "talg.h"
 #include "autoutils.h"
 
-static int runstattests(double *x, int N, const char * test,const char *mtype,double alpha) {
+// TODO: macheps can probably be done better
+static double 
+macheps() 
+{
+	double macheps;
+	macheps = 1.0;
+
+	while ((macheps + 1.0) > 1.0)
+		macheps = macheps / 2.0;
+
+	macheps = macheps * 2;
+
+	return macheps;
+}
+
+static int runstattests(double *x, int N, const char * test,const char *mtype,double alpha)
+{
     int diff,klag,lshort;
     const char *alternative;
     const char *type;
@@ -8,10 +25,10 @@ static int runstattests(double *x, int N, const char * test,const char *mtype,do
     const char *selectlags;
     double stat, pval;
     double cval[9] = {0,0,0,0,0,0,0,0,0};
-	double cprobs[3] = {0,0,0};
-	double auxstat[2] = {0,0};
+    double cprobs[3] = {0,0,0};
+    double auxstat[2] = {0,0};
     double teststat[3] = {0,0,0};
-	int laux,pN,cvrows,cvcols,ltstat;
+    int laux,pN,cvrows,cvcols,ltstat;
 
     if (!strcmp(test,"kpss")) {
         if (!strcmp(mtype,"level")) {
@@ -28,6 +45,7 @@ static int runstattests(double *x, int N, const char * test,const char *mtype,do
         ur_kpss(x,N,type,lshort,&klag,&stat,&pval);
         //printf("KPSS stat %g pval %g \n",stat,pval);
         diff = (pval < alpha) ? 1 : 0;
+
     } else if (!strcmp(test,"df") || !strcmp(test,"adf")) {
         if (!strcmp(mtype,"level")) {
             type = "drift";

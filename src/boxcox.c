@@ -1,4 +1,7 @@
+#include "optimc.h"
+#include "stats.h"
 #include "boxcox.h"
+
 
 int checkConstant(double *x, int N) {
     int i, cc;

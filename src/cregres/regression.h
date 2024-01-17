@@ -8,7 +8,6 @@
 #ifndef REGRESSION_H_
 #define REGRESSION_H_
 
-#include "stats.h"
 
 #ifdef __cplusplus
 extern "C" {

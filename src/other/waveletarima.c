@@ -1,8 +1,10 @@
-#include "waveletarima.h"
+
+#include "wavelib.h"
+#include "ctsa.h"
 
 void waveletarima(double *x, int N, char *wname, int levels,int p, int q, double *forecasts, int lengthfor) {
     wave_object obj;
-	wt_object wt;
+    wt_object wt;
     int d, Nused, M, retval, J, i;
     double *phi, *theta;
     double *inp;

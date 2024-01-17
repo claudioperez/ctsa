@@ -8,37 +8,42 @@
 #ifndef CTSA_H_
 #define CTSA_H_
 
-#include "emle.h"
 #include "autoutils.h"
 
-#ifdef __cplusplus
-extern "C" {
+#ifdef __cplusplus 
+extern "C" { 
 #endif
-	/*
-	ARIMA vs SARIMA
-	Typically you should use SARIMA if you are calculating seasonal models and ARIMA for non-seasonal models. However, ARIMA wil not work if the number of parameters p and q exceed 100.
-	For these extreme-case non-seasonal models, use SARIMA and set seasonal paramters to zero. SARIMA and ARIMA work identically for non-seasonal models otherwise.
-	*/
+
+/*
+   ARIMA vs SARIMA 
+
+   Typically you should use SARIMA if you are calculating seasonal models and
+   ARIMA for non-seasonal models. However, ARIMA wil not work if the number
+   of parameters p and q exceed 100. For these extreme-case non-seasonal
+   models, use SARIMA and set seasonal paramters to zero. SARIMA and ARIMA
+   work identically for non-seasonal models otherwise.
+*/
 
 typedef struct arima_set* arima_object;
 
 arima_object arima_init(int p, int d, int q, int N);
 
 struct arima_set{
-	int N;// length of time series
-	int Nused;//length of time series after differencing, Nused = N - d
+	int N;         // length of time series
+	int Nused;     // length of time series after differencing, Nused = N - d
 	int method;
 	int optmethod;
-	int p;// size of phi
+	int p;         // size of phi
 	int d;// Number of times the series is to be differenced
 	int q;//size of theta
 	int M; // M = 0 if mean is 0.0 else M = 1
-	int ncoeff;// Total Number of Coefficients to be estimated
-	int cssml;// Uses CSS before MLE if 1 else uses MLE only if cssml is 0
+
+	int ncoeff;    // Total Number of Coefficients to be estimated
+	int cssml;     // Uses CSS before MLE if 1 else uses MLE only if cssml is 0
 	double *phi;
 	double *theta;
-	double *vcov;// Variance-Covariance Matrix Of length lvcov
-	int lvcov; //length of VCOV
+	double *vcov;  // Variance-Covariance Matrix Of length lvcov
+	int lvcov;     //length of VCOV
 	double *res;
 	double mean;
 	double var;
@@ -208,7 +213,8 @@ struct auto_arima_set{
 
 typedef struct sarimax_wrapper_set* sarimax_wrapper_object;
 
-sarimax_wrapper_object sarimax_wrapper(sarimax_wrapper_object model,double *y, int N,int *order, int *seasonal, double *xreg, int r, int drift,int mean,
+sarimax_wrapper_object
+sarimax_wrapper(sarimax_wrapper_object model,double *y, int N,int *order, int *seasonal, double *xreg, int r, int drift,int mean,
 	double *lambda, int biasadj,int method);
 
 struct sarimax_wrapper_set{
@@ -373,6 +379,5 @@ void hr(double *x, int N, int p, int q, double *phi, double *theta, double *var)
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif /* CTSA_H_ */

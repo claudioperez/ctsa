@@ -4,7 +4,11 @@
  *  Created on: Jun 19, 2013
  *      Author: Rafat Hussain
  */
-
+#include <math.h>
+// stdio and stdlib for exit and printf
+#include "erfunc.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include "pdist.h"
 
 double normalpdf(double x, double mu, double sigma) {

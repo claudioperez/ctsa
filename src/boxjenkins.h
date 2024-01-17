@@ -8,9 +8,6 @@
 #ifndef BOXJENKINS_H_
 #define BOXJENKINS_H_
 
-#include "talg.h"
-#include "optimc.h"
-
 
 #ifdef __cplusplus
 extern "C" {

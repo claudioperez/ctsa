@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15.0 FATAL_ERROR)
 
 set(PROJECT_NAME ctsa)
 project(${PROJECT_NAME} CXX C)
@@ -29,16 +29,16 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 # make include globaly visible
-set(PROJECT_WIDE_INCLUDE ${CTSA_SRC_ROOT}/include)
-include_directories(${PROJECT_WIDE_INCLUDE})
+# set(PROJECT_WIDE_INCLUDE ${CTSA_SRC_ROOT}/include)
+# include_directories(${PROJECT_WIDE_INCLUDE})
 
 
 
 
-include_directories(${COMMON_BIN_PATH})
+#include_directories(${COMMON_BIN_PATH})
 
 
 add_subdirectory(src)
 add_subdirectory(test) 
 
-install(DIRECTORY ${CTSA_SRC_ROOT}/include/ DESTINATION include FILES_MATCHING PATTERN "*.h")
+#install(DIRECTORY ${CTSA_SRC_ROOT}/include/ DESTINATION include FILES_MATCHING PATTERN "*.h")

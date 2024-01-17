@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "lls.h"
+#include "../src/cregres/regression.h"
+#include "../src/talg.h"
 #include "../src/ctsa.h"
 #include "../src/errors.h"
 #include "../src/autoutils.h"

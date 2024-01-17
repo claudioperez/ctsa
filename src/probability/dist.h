@@ -8,9 +8,6 @@
 #ifndef DIST_H_
 #define DIST_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "erfunc.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,7 +1,14 @@
-
+// Exact Minimum Likelihood Estimation
+#include <stdlib.h>
+#include "regression.h"
+#include "optimc/optimc.h"
+#include "talg.h"
+#include "stats.h" // mean()
 #include "emle.h"
 
-alik_css_object alik_css_init(int p, int d, int q, int N) {
+alik_css_object
+alik_css_init(int p, int d, int q, int N)
+{
 	alik_css_object obj = NULL;
 	int i, t;
 	if (p > 100 || q > 100) {
@@ -1370,8 +1377,11 @@ double fas154(double *b,int pq,void *params) {
 	return value;
 }
 
-int as154(double *inp, int N, int optmethod, int p, int d, int q, double *phi, double *theta, double *wmean, double *var,
-	double *resid,double *loglik,double *hess, int cssml) {
+// Algorithm AS 154
+int as154(double *inp, int N, int optmethod, 
+  int p, int d, int q, double *phi, double *theta, double *wmean, double *var,
+	double *resid,double *loglik,double *hess, int cssml)
+{
 	int i,pq,retval,length,ret,rp,P,Q;
 	double *b,*tf,*x,*dx,*thess,*varcovar,*res;
 	int *ipiv;

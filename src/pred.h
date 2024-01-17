@@ -8,7 +8,6 @@
 #ifndef PRED_H_
 #define PRED_H_
 
-#include "initest.h"
 
 #ifdef __cplusplus
 extern "C" {

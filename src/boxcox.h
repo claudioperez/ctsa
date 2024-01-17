@@ -1,9 +1,6 @@
 #ifndef BOXCOX_H_
 #define BOXCOX_H_
 
-#include "optimc.h"
-#include "stats.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif

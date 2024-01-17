@@ -10,6 +10,20 @@
 
 #include "nls.h"
 
+/* ARIMA, SARIMA, SARIMAX
+optmethod accepts values between 0 and 7 where -
+*/
+enum OptimizeMethod {
+  NelderMead           = 0, //  Nelder-Mead
+  NewtonLineSearch     = 1, //  Newton Line Search
+  NewtonTrustHookStep  = 2, //  Newton Trust Region - Hook Step
+  NewtonTrustDoubleDog = 3, //  Newton Trust Region - Double Dog-Leg
+  Method_4 = 4, //  Conjugate Gradient
+  Method_5 = 5, //  BFGS
+  Method_6 = 6, //  Limited Memory BFGS
+  Method_7 = 7, //  BFGS Using More Thuente Method (Default)
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif

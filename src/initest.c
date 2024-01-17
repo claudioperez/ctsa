@@ -4,7 +4,9 @@
  *  Created on: Jul 13, 2014
  *      Author: Rafat Hussain
  */
-
+#include <stdlib.h>
+#include "optimc/matrix.h"
+#include "stats.h"
 #include "initest.h"
 
 void innalg(double *vec, int l, int N,double *v, double *theta) {

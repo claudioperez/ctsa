@@ -8,9 +8,9 @@
 #ifndef POLYROOT_H_
 #define POLYROOT_H_
 
-#include <float.h>
-#include "stats.h"
-#include "matrix.h"
+// #include <float.h>
+// #include "stats.h"
+// #include "matrix.h"
 
 #ifdef __cplusplus
 extern "C" {

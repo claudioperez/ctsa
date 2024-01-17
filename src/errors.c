@@ -1,3 +1,5 @@
+#include <math.h>
+#include <stdlib.h>
 #include "errors.h"
 
 static void pe(double *predicted, double *actual, int N,double *err) {

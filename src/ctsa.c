@@ -1,4 +1,9 @@
+#include "talg.h"
+#include "stats.h"
+#include "emle.h"
 #include "ctsa.h"
+#include "polyroot.h"
+#include <stdlib.h>
 
 arima_object arima_init(int p, int d, int q, int N) {
 	arima_object obj = NULL;

@@ -136,7 +136,8 @@ struct alik_seas_set{
 
 typedef struct xlik_set* xlik_object;
 
-xlik_object xlik_init(int p, int d, int q, int s, int P, int D, int Q,int M, int N);
+static xlik_object
+xlik_init(int p, int d, int q, int s, int P, int D, int Q,int M, int N);
 
 struct xlik_set{
 	int p;// size of phi

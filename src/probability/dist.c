@@ -6,6 +6,9 @@
  *      Author: Rafat Hussain
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include "erfunc.h"
 #include "dist.h"
 
 double fix(double x) {

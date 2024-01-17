@@ -5,7 +5,11 @@
  *      Author: Rafat Hussain
  */
 
+#include "talg.h"
+#include "stats.h"
+#include "optimc.h"
 #include "boxjenkins.h"
+
 
 void USPE(double *inp,int N,int p, int q, double *phi,double *theta,double *thetac,double *var) {
 	int K,i,j,l,t,temp,it1;

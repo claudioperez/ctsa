@@ -1,3 +1,10 @@
+#include <math.h>
+#include <float.h>
+#include <stdlib.h>
+#include "talg.h"
+#include "matrix.h"
+#include "stats.h" // mean()
+#include "regression.h"
 #include "unitroot.h"
 
 /*
@@ -980,8 +987,6 @@ void ur_pp2(double *x, int N,const char* type,const char* model,int lshort, int 
         }
 
         //printf("sig %g lambda %g lambda_prime %g my_stat %g teststat %g \n",sig,lambda,lambda_prime,my_stat,*teststat);
-        
-
 
 
         free(varcovar);

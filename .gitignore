@@ -1,5 +1,8 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #Folders Ignore
+.geany/
 Bin/
+.geany/
 
 #cmake ignore
 CMakeCache.txt
@@ -34,5 +37,8 @@ language.settings.xml
 
 #stackdump
 *.stackdump
+
+#vim 
+*.swp
 
 

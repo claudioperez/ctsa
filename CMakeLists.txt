@@ -1,8 +1,10 @@
+# SPDX-License-Identifier: BSD-3-Clause
 cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
 
 set(PROJECT_NAME ctsa)
 project(${PROJECT_NAME} CXX C)
 
+SET(CMAKE_C_FLAGS "-W -Wall -Wextra -O0")
 
 # src root path
 set(CTSA_SRC_ROOT ${PROJECT_SOURCE_DIR} CACHE PATH "ctsa source root")

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: BSD-3-Clause
 add_executable(acftest acftest.c)
 
 target_link_libraries(acftest ctsalib m)
@@ -21,6 +22,36 @@ target_link_libraries(pacftest ctsalib m)
 add_executable(sarimatest sarimatest.c)
 
 target_link_libraries(sarimatest ctsalib m)
+
+# TODO add the header files via a `target_include_directories`
+add_executable(sarimatest2 
+			   sarimatest2.c 
+			   auxlib.c 
+			   auxlib.h 
+			   csv_in.c 
+			   csv_in.h 
+			   )
+
+target_link_libraries(sarimatest2 ctsalib m)
+
+# TODO add the header files via a `target_include_directories`
+add_executable(sarimatest3 
+			   sarimatest3.c 
+			   auxlib.c 
+			   auxlib.h 
+			   csv_in.c 
+			   csv_in.h 
+			   )
+
+target_link_libraries(sarimatest3 ctsalib m)
+
+# TODO add the header files via a `target_include_directories`
+add_executable(sarimatest_mu
+	       sarimatest_mu.c 
+	       minunit.h
+	      )
+
+target_link_libraries(sarimatest_mu ctsalib m)
 
 add_executable(misctests misctests.c)
 
@@ -57,5 +88,5 @@ target_link_libraries(autoarimatest3 ctsalib m)
 
 set_target_properties(acftest arimatest artest artest2 pacftest sarimatest misctests dwttests sarimaxtest1 sarimaxtest2 sarimaxtest3 autoarimatest1 autoarimatest2 autoarimatest3
         PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/test"
+        RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}"
 )

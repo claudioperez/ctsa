@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-3-Clause
 #include "autoutils.h"
 
 static int runstattests(double *x, int N, const char * test,const char *mtype,double alpha) {
@@ -101,7 +102,7 @@ int ndiffs(double *x, int N,double *alpha, const char *test,const char *type, in
     alpha_ = alpha == NULL ? 0.05 : *alpha;
     max_d_ = max_d == NULL ? 2 : *max_d;
 
-    printf("%g \n",alpha_);
+    // printf("%g \n",alpha_);
 
     if (max_d_ < 0) {
         printf("Error. Maximum Difference cannot be less than 0 \n");
@@ -192,7 +193,7 @@ int nsdiffs(double *x, int N,int f,double *alpha, const char *test, int *max_D) 
 
     if (!strcmp(test,"ocsb")) {
         if (alpha_ != 0.05) {
-            printf("Significance levels other than 5% are not currently supported by test='ocsb', defaulting to alpha = 0.05.");
+            printf("Significance levels other than 5%% are not currently supported by test='ocsb', defaulting to alpha = 0.05.");
             alpha_ = 0.05;
         }
     }
